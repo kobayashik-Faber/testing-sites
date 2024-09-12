@@ -1,8 +1,10 @@
 {
-  "name": "@testing-sites/source",
-  "version": "0.0.0",
+  "name": "@testing-sites/monorepo",
+  "version": "0.0.1",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx run-many -t build"
+  },
   "private": true,
   "dependencies": {},
   "devDependencies": {
