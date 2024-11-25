@@ -1,17 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <!-- Mieruca Optimize Tag -->
-    <script type="text/javascript" id="mierucaOptimizejs">
-    window.__optimizeid = window.__optimizeid || [];__optimizeid.push([1842686338]);
-    (function () {var fjs = document.createElement('script');fjs.type = 'text/javascript';
-    fjs.async = true;fjs.id = "fjssync";var timestamp = new Date;fjs.src = 'https://opt.mieru-ca.com/service/js/mieruca-optimize.js?v=' + timestamp.getTime();
-    var x = document.getElementsByTagName('script')[0];x.parentNode.insertBefore(fjs, x);})();
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-W6Z5HJBL");
     </script>
-    <!-- End Mieruca Optimize Tag -->
+    <!-- End Google Tag Manager -->
   </head>
   <body>
     <div
@@ -26,6 +32,17 @@
       <a href="/testing-sites/next/">Next.js</a>
       <a href="/testing-sites/nuxt/">Nuxt</a>
       <a href="/testing-sites/svelte-kit/">SvelteKit</a>
+    </div>
+
+    <div
+      style="
+        text-align: center;
+        margin-top: 1rem;
+        color: gray;
+      "
+    >
+      When <code>dev=true</code> is set in the URL, the Google Tag Manager uses
+      dev.opt.~
     </div>
 
     <footer
