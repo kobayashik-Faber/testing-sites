@@ -68,5 +68,13 @@
         <a href="https://github.com/kobayashik-Faber">kobayashik-Faber</a>
       </small>
     </footer>
+
+    <script>
+      (() => {
+        if (location.search) {
+          Array.from(document.getElementsByTagName("a")).forEach((el) => el.href += location.search);
+        }
+      })();
+    </script>
   </body>
 </html>

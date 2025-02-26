@@ -3,6 +3,7 @@ import "./globals.css";
 import { AppHeader } from "@/components/AppHeader";
 import { AppFooter } from "@/components/AppFooter";
 import Script from "next/script";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: {
@@ -39,7 +40,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
           `,
           }}
         ></noscript>
-        <AppHeader />
+        <Suspense>
+          <AppHeader />
+        </Suspense>
         {children}
         <AppFooter />
       </body>

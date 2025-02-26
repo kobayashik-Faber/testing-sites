@@ -21,5 +21,13 @@
 </head>
 <body>
     <a href="../">Go to Original page</a>
+
+    <script>
+      (() => {
+        if (location.search) {
+          Array.from(document.getElementsByTagName("a")).forEach((el) => el.href += location.search);
+        }
+      })();
+    </script>
 </body>
 </html>
