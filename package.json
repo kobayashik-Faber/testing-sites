@@ -3,14 +3,16 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "build": "nx run-many -t build"
+    "build": "nx run-many -t build && cp -r packages/next/out public/next && cp -r packages/nuxt/.output/public public/nuxt && cp -r packages/svelte-kit/build public/svelte-kit",
+    "preview": "ln -fs public testing-sites && http-server . -p 4200"
   },
   "private": true,
   "dependencies": {},
   "devDependencies": {
     "@nx/js": "19.7.2",
     "@nx/workspace": "19.7.2",
-    "nx": "19.7.2"
+    "nx": "19.7.2",
+    "http-server": "14.1.1"
   },
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
 }
