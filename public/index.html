@@ -43,13 +43,28 @@
     <div
       style="
         text-align: center;
-        margin-top: 1rem;
+        margin-block: 1rem;
         color: gray;
         background: transparent;
       "
     >
       When <code>dev=true</code> is set in the URL, the Google Tag Manager uses
       dev.opt.~
+    </div>
+
+    <div
+      style="
+        align-items: center;
+        background-color: white;
+        display: flex;
+        font-weight: bold;
+        gap: 1rem;
+        justify-content: center;
+      "
+    >
+      <button type="button" onclick="location.href='/testing-sites/next/'+location.search">Next.js</button>
+      <button type="button" onclick="location.href='/testing-sites/nuxt/'+location.search">Nuxt</button>
+      <button type="button" onclick="location.href='/testing-sites/svelte-kit/'+location.search">SvelteKit</button>
     </div>
 
     <footer
