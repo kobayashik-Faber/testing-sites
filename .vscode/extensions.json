@@ -1,7 +1,8 @@
 {
   "recommendations": [
-    
+    "astro-build.astro-vscode",
+    "esbenp.prettier-vscode",
     "nrwl.angular-console",
-    "esbenp.prettier-vscode"
+    "unifiedjs.vscode-mdx"
   ]
 }

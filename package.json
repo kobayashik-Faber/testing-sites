@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "build": "nx run-many -t build && cp -r packages/next/out public/next && cp -r packages/nuxt/.output/public public/nuxt && cp -r packages/svelte-kit/build public/svelte-kit",
+    "build": "nx run-many -t build && pnpm clean && cp -r packages/next/out public/next && cp -r packages/nuxt/.output/public public/nuxt && cp -r packages/svelte-kit/build public/svelte-kit && cp -r packages/astro/dist public/astro",
+    "clean": "rm -rf public/next public/nuxt public/svelte-kit public/astro",
     "preview": "ln -fs public testing-sites && http-server . -p 4200"
   },
   "private": true,
