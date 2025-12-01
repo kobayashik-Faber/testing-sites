@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <title>HEATMAP Click Tracking Test Cases</title>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-W6Z5HJBL");
+    </script>
+    <!-- End Google Tag Manager -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .test-section {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fafafa;
+      }
+      .test-section h2 {
+        color: #333;
+        margin-top: 0;
+        border-bottom: 2px solid #4caf50;
+        padding-bottom: 10px;
+      }
+      .test-case {
+        margin: 15px 0;
+        padding: 15px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .test-case h3 {
+        margin-top: 0;
+        color: #555;
+        font-size: 16px;
+      }
+      .expected {
+        background-color: #e8f5e8;
+        padding: 8px;
+        margin: 10px 0;
+        border-left: 4px solid #4caf50;
+        font-family: monospace;
+        font-size: 14px;
+      }
+      .html-structure {
+        background-color: #f8f9fa;
+        padding: 12px;
+        margin: 10px 0;
+        border-left: 4px solid #6c757d;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        white-space: pre-wrap;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      .html-structure .tag {
+        color: #d63384;
+      }
+      .html-structure .attr {
+        color: #6f42c1;
+      }
+      .html-structure .text {
+        color: #198754;
+      }
+      .product-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 10px;
+        text-align: center;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .overlay-button {
+        background-color: #ff5722;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        margin-top: 10px;
+        display: inline-block;
+      }
+      .image-gallery {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+      .gallery-item {
+        flex: 1;
+        min-width: 150px;
+        text-align: center;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+      }
+      .navigation-bar {
+        background-color: #2196f3;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .navigation-bar a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        margin: 0 5px;
+        border-radius: 3px;
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      .complex-link {
+        display: block;
+        padding: 20px;
+        border: 2px solid #9c27b0;
+        margin: 10px 0;
+        text-decoration: none;
+        color: inherit;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+      }
+      .complex-link:hover {
+        background-color: #f0f0f0;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .standalone-section {
+        background-color: #fff3cd;
+        border-color: #ffc107;
+      }
+      .image-link-section {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+      }
+      .complex-section {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+      }
+    </style>
+    <script>
+      // ページ遷移を防ぐ処理（クリック計測は阻害しない）
+      document.addEventListener("DOMContentLoaded", function () {
+        // バブリングフェーズでキャッチしてページ遷移を防ぐ
+        document.addEventListener(
+          "click",
+          function (e) {
+            // リンク要素かチェック
+            let target = e.target;
+            let link = null;
+
+            // クリックされた要素またはその親要素にaタグがあるか確認
+            while (target && target !== document) {
+              if (
+                target.nodeName === "A" &&
+                (target.hasAttribute("href") ||
+                  target.hasAttribute("xlink:href"))
+              ) {
+                link = target;
+                break;
+              }
+              target = target.parentElement;
+            }
+
+            if (link) {
+              e.preventDefault(); // ページ遷移を防ぐ
+              const href =
+                link.href ||
+                link.getAttribute("href") ||
+                link.getAttribute("xlink:href");
+              console.log("🔗 Link click prevented:", href);
+
+              // 視覚的なフィードバックとしてアラート表示
+              alert(
+                `🔗 リンククリックが検出されました\n\nURL: ${href}\n\n※ ページ遷移は防止されています`,
+              );
+            }
+          },
+          false,
+        ); // バブリングフェーズで実行（HEATMAPのキャプチャフェーズの後）
+      });
+    </script>
+  </head>
+  <body>
+    <h1>🔥 HEATMAP Click Tracking Behavior Test Cases</h1>
+
+    <div
+      style="
+        background-color: #e8f5e8;
+        border: 2px solid #4caf50;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+      "
+    >
+      <h3 style="margin: 0 0 10px 0; color: #2e7d32">
+        📋 テストページの注意事項
+      </h3>
+      <ul style="margin: 10px 0; padding-left: 20px; color: #2e7d32">
+        <li>
+          <strong>ページ遷移は発生しません</strong> -
+          すべてのリンクはJavaScriptで無効化されています
+        </li>
+        <li>
+          <strong>期待値と実際の値を比較</strong
+          >してクリック追跡の挙動を検証してください
+        </li>
+      </ul>
+    </div>
+
+    <!-- 画像リンクセクション -->
+    <div class="test-section image-link-section">
+      <h2>📸 画像リンクのテストケース</h2>
+
+      <div class="test-case">
+        <h3>Case 1: 単純な画像リンク</h3>
+        <a href="/test/simple-product">
+          <img
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNENBRjUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Qcm9kdWN0IEltYWdlPC90ZXh0Pjwvc3ZnPg=="
+            alt="Test Product"
+          />
+        </a>
+        <div class="html-structure">
+          <span class="tag">&lt;a</span> <span class="attr">href</span>=<span
+            class="text"
+            >"/test/simple-product"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;img</span>
+          <span class="attr">alt</span>=<span class="text">"Test Product"</span>
+          <span class="attr">src</span>=<span class="text">"..."</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;/a&gt;</span>
+        </div>
+        <div class="expected">
+          期待値: txt="Test Product", href="/test/simple-product"
+        </div>
+      </div>
+
+      <div class="test-case">
+        <h3>Case 2: 複雑な商品カードリンク</h3>
+        <a href="/test/gaming-laptop" class="complex-link">
+          <div class="product-card">
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMjE5NkYzIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5HYW1pbmcgTGFwdG9wPC90ZXh0Pjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+JDE4OTk8L3RleHQ+PC9zdmc+"
+              alt="Gaming Laptop"
+            />
+            <h4>高性能ゲーミングPC</h4>
+            <p>最新グラフィックスカード搭載</p>
+            <div class="overlay-button">詳細を見る</div>
+          </div>
+        </a>
+        <div class="html-structure">
+          <span class="tag">&lt;a</span> <span class="attr">href</span>=<span
+            class="text"
+            >"/test/gaming-laptop"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;div</span>
+          <span class="attr">class</span>=<span class="text"
+            >"product-card"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;img</span>
+          <span class="attr">alt</span>=<span class="text">"Gaming Laptop"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;h4&gt;</span
+          ><span class="text">高性能ゲーミングPC</span
+          ><span class="tag">&lt;/h4&gt;</span>
+          <span class="tag">&lt;p&gt;</span
+          ><span class="text">最新グラフィックス...</span
+          ><span class="tag">&lt;/p&gt;</span> <span class="tag">&lt;div</span>
+          <span class="attr">class</span>=<span class="text"
+            >"overlay-button"</span
+          ><span class="tag">&gt;</span><span class="text">詳細を見る</span
+          ><span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;/a&gt;</span>
+        </div>
+        <div class="expected">
+          画像クリック時: txt="高性能ゲーミングPC 最新グラフィックスカード搭載
+          詳細を見る", href="/test/gaming-laptop"<br />
+          「詳細を見る」クリック時: txt="高性能ゲーミングPC
+          最新グラフィックスカード搭載 詳細を見る",
+          href="/test/gaming-laptop"<br />
+          h4クリック時: txt="高性能ゲーミングPC 最新グラフィックスカード搭載
+          詳細を見る", href="/test/gaming-laptop"
+        </div>
+      </div>
+
+      <div class="test-case">
+        <h3>Case 3: テキストなしリンク</h3>
+        <a href="/test/image-only">
+          <div style="padding: 10px; border: 2px dashed #ccc">
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjEyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkY1NzIyIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JY29uIE9ubHk8L3RleHQ+PC9zdmc+"
+              alt="Icon Button"
+            />
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjEyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjOUMyN0IwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TZWNvbmQgSWNvbjwvdGV4dD48L3N2Zz4="
+              alt="Second Icon"
+            />
+          </div>
+        </a>
+        <div class="html-structure">
+          <span class="tag">&lt;a</span> <span class="attr">href</span>=<span
+            class="text"
+            >"/test/image-only"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;div&gt;</span>
+          <span class="tag">&lt;img</span> <span class="attr">alt</span>=<span
+            class="text"
+            >"Icon Button"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;img</span>
+          <span class="attr">alt</span>=<span class="text">"Second Icon"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;/a&gt;</span>
+        </div>
+        <div class="expected">
+          最初の画像クリック時: txt="Icon Button", href="/test/image-only"<br />
+          二番目の画像クリック時: txt="Icon Button", href="/test/image-only"<br />
+          div要素クリック時: txt="Icon Button", href="/test/image-only"
+        </div>
+      </div>
+
+      <div class="test-case">
+        <h3>Case 4: ギャラリーリンク</h3>
+        <div class="image-gallery">
+          <div class="gallery-item">
+            <a href="/test/gallery/nature">
+              <img
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNENBRjUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5OYXR1cmU8L3RleHQ+PC9zdmc+"
+                alt="Beautiful Nature"
+              />
+              <p>自然の風景</p>
+            </a>
+          </div>
+          <div class="gallery-item">
+            <a href="/test/gallery/city">
+              <img
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkY5ODAwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DaXR5PC90ZXh0Pjwvc3ZnPg=="
+                alt="City Skyline"
+              />
+              <p>都市の夜景</p>
+            </a>
+          </div>
+        </div>
+        <div class="html-structure">
+          <span class="tag">&lt;div</span> <span class="attr">class</span>=<span
+            class="text"
+            >"gallery-item"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;a</span>
+          <span class="attr">href</span>=<span class="text"
+            >"/test/gallery/nature"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;img</span>
+          <span class="attr">alt</span>=<span class="text"
+            >"Beautiful Nature"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;p&gt;</span
+          ><span class="text">自然の風景</span
+          ><span class="tag">&lt;/p&gt;</span>
+          <span class="tag">&lt;/a&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr">class</span>=<span
+            class="text"
+            >"gallery-item"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;a</span>
+          <span class="attr">href</span>=<span class="text"
+            >"/test/gallery/city"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;img</span>
+          <span class="attr">alt</span>=<span class="text">"City Skyline"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;p&gt;</span
+          ><span class="text">都市の夜景</span
+          ><span class="tag">&lt;/p&gt;</span>
+          <span class="tag">&lt;/a&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+        </div>
+        <div class="expected">
+          自然画像クリック時: txt="自然の風景", href="/test/gallery/nature"<br />
+          「自然の風景」テキストクリック時: txt="自然の風景",
+          href="/test/gallery/nature"<br />
+          都市画像クリック時: txt="都市の夜景", href="/test/gallery/city"
+        </div>
+      </div>
+    </div>
+
+    <!-- スタンドアロン要素セクション -->
+    <div class="test-section standalone-section">
+      <h2>🖼️ スタンドアロン要素のテストケース</h2>
+
+      <div class="test-case">
+        <h3>Case 5: スタンドアロン画像（リンクなし）</h3>
+        <img
+          src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjRkZDMTA3Ii8+PHRleHQgeD0iNTAlIiB5PSI0NSUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iYmxhY2siIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TdGFuZGFsb25lIEJhbm5lcjwvdGV4dD48dGV4dCB4PSI1MCUiIHk9IjYwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJibGFjayIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIExpbmsgV3JhcHBlcjwvdGV4dD48L3N2Zz4="
+          alt="Advertisement Banner"
+          style="cursor: pointer"
+        />
+        <div class="html-structure">
+          <span class="tag">&lt;img</span> <span class="attr">alt</span>=<span
+            class="text"
+            >"Advertisement Banner"</span
+          >
+          <span class="attr">src</span>=<span class="text">"..."</span
+          ><span class="tag">&gt;</span>
+          <span class="text">(スタンドアロン)</span>
+        </div>
+        <div class="expected">
+          期待値: txt="Advertisement Banner",
+          href="data:image/svg+xml;base64,..." (画像のsrc)
+        </div>
+      </div>
+
+      <div class="test-case">
+        <h3>Case 6: スタンドアロンボタン</h3>
+        <button onclick="alert('Button clicked!')">製品を購入</button>
+        <button>
+          <img
+            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTkgN2wtMyAzLTMtM001IDdsMTAgMTBMMjUgN1oiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=="
+            alt="Download Icon"
+          />
+          ダウンロード
+        </button>
+        <div class="html-structure">
+          <span class="tag">&lt;button&gt;</span
+          ><span class="text">製品を購入</span
+          ><span class="tag">&lt;/button&gt;</span>
+          <span class="tag">&lt;button&gt;</span>
+          <span class="tag">&lt;img</span> <span class="attr">alt</span>=<span
+            class="text"
+            >"Download Icon"</span
+          ><span class="tag">&gt;</span>
+          <span class="text">ダウンロード</span>
+          <span class="tag">&lt;/button&gt;</span>
+        </div>
+        <div class="expected">
+          テキストボタンクリック時: txt="製品を購入", href=""<br />
+          アイコンボタンクリック時: txt="ダウンロード", href=""<br />
+          アイコン画像直接クリック時: txt="ダウンロード",
+          href=""
+        </div>
+      </div>
+
+      <div class="test-case">
+        <h3>Case 7: フォーム要素</h3>
+        <input
+          type="text"
+          placeholder="検索キーワードを入力"
+          value="テスト入力"
+        />
+        <textarea placeholder="コメントを入力してください">
+サンプルテキスト</textarea
+        >
+        <div class="html-structure">
+          <span class="tag">&lt;input</span>
+          <span class="attr">value</span>=<span class="text">"テスト入力"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;textarea&gt;</span
+          ><span class="text">サンプルテキスト</span
+          ><span class="tag">&lt;/textarea&gt;</span>
+        </div>
+        <div class="expected">
+          input要素クリック時: txt="", href=""<br />
+          textarea要素クリック時: txt="", href=""
+        </div>
+      </div>
+    </div>
+
+    <!-- 複雑なケースセクション -->
+    <div class="test-section complex-section">
+      <h2>🔗 複雑なリンク構造のテストケース</h2>
+
+      <div class="test-case">
+        <h3>Case 8: ネストした複雑なリンク</h3>
+        <a href="/test/complex-product">
+          <article style="border: 1px solid #ddd; padding: 20px; margin: 10px">
+            <header>
+              <h3>製品名: ワイヤレスイヤホン</h3>
+              <img
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNjA3RDhCIi8+PHRleHQgeD0iNTAlIiB5PSI0NSUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5XaXJlbGVzcyBFYXJidWRzPC90ZXh0Pjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UHJlbWl1bSBRdWFsaXR5PC90ZXh0Pjwvc3ZnPg=="
+                alt="Wireless Earbuds"
+              />
+            </header>
+            <section>
+              <p>高音質でノイズキャンセリング機能付き</p>
+              <div class="product-info">
+                <span class="price">¥12,980</span>
+                <img
+                  src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTIgMiA2IDE4SDZsMTIweiIgZmlsbD0iZ29sZCIvPjwvc3ZnPg=="
+                  alt="5 Stars"
+                />
+              </div>
+            </section>
+            <footer>
+              <button type="button" style="background-color: #ff5722">
+                今すぐ購入
+              </button>
+            </footer>
+          </article>
+        </a>
+        <div class="html-structure">
+          <span class="tag">&lt;a</span> <span class="attr">href</span>=<span
+            class="text"
+            >"/test/complex-product"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;article&gt;</span>
+          <span class="tag">&lt;header&gt;</span>
+          <span class="tag">&lt;h3&gt;</span
+          ><span class="text">製品名: ワイヤレスイヤホン</span
+          ><span class="tag">&lt;/h3&gt;</span>
+          <span class="tag">&lt;img</span> <span class="attr">alt</span>=<span
+            class="text"
+            >"Wireless Earbuds"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;/header&gt;</span>
+          <span class="tag">&lt;section&gt;</span>
+          <span class="tag">&lt;p&gt;</span><span class="text">高音質で...</span
+          ><span class="tag">&lt;/p&gt;</span>
+          <span class="tag">&lt;span</span>
+          <span class="attr">class</span>=<span class="text">"price"</span
+          ><span class="tag">&gt;</span><span class="text">￥12,980</span
+          ><span class="tag">&lt;/span&gt;</span>
+          <span class="tag">&lt;img</span> <span class="attr">alt</span>=<span
+            class="text"
+            >"5 Stars"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;/section&gt;</span>
+          <span class="tag">&lt;footer&gt;</span>
+          <span class="tag">&lt;button&gt;</span
+          ><span class="text">今すぐ購入</span
+          ><span class="tag">&lt;/button&gt;</span>
+          <span class="tag">&lt;/footer&gt;</span>
+          <span class="tag">&lt;/article&gt;</span>
+          <span class="tag">&lt;/a&gt;</span>
+        </div>
+        <div class="expected">
+          メイン画像クリック時: txt="製品名: ワイヤレスイヤホン 高音質で...",
+          href="/test/complex-product"<br />
+          h3クリック時: txt="製品名: ワイヤレスイヤホン 高音質で...",
+          href="/test/complex-product"<br />
+          星マーククリック時: txt="製品名: ワイヤレスイヤホン 高音質で...",
+          href="/test/complex-product"<br />
+          ボタンクリック時: txt="製品名: ワイヤレスイヤホン 高音質で...",
+          href="/test/complex-product"<br />
+          価格表示クリック時: txt="製品名: ワイヤレスイヤホン 高音質で...",
+          href="/test/complex-product"
+        </div>
+      </div>
+
+      <div class="test-case">
+        <h3>Case 9: SVGリンク</h3>
+        <a href="/test/svg-link" xlink:href="/test/svg-fallback">
+          <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="#E91E63" />
+            <text
+              x="50%"
+              y="50%"
+              font-family="Arial"
+              font-size="16"
+              fill="white"
+              text-anchor="middle"
+              dy=".3em"
+            >
+              SVG Link Test
+            </text>
+          </svg>
+        </a>
+        <div class="html-structure">
+          <span class="tag">&lt;a</span> <span class="attr">href</span>=<span
+            class="text"
+            >"/test/svg-link"</span
+          >
+          <span class="attr">xlink:href</span>=<span class="text"
+            >"/test/svg-fallback"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;svg&gt;</span>
+          <span class="tag">&lt;text&gt;</span
+          ><span class="text">SVG Link Test</span
+          ><span class="tag">&lt;/text&gt;</span>
+          <span class="tag">&lt;/svg&gt;</span>
+          <span class="tag">&lt;/a&gt;</span>
+        </div>
+        <div class="expected">
+          期待値: txt="SVG Link Test", href="/test/svg-link"
+          (またはxlink:hrefフォールバック)
+        </div>
+      </div>
+
+      <div class="test-case">
+        <h3>Case 10: 動画要素</h3>
+        <video
+          controls
+          width="300"
+          poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjNjA3RDhCIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5WaWRlbyBUaHVtYm5haWw8L3RleHQ+PC9zdmc+"
+        >
+          <source src="/test/sample-video.mp4" type="video/mp4" />
+          動画を再生できません
+        </video>
+
+        <div class="html-structure">
+          <span class="tag">&lt;video</span> <span class="attr">controls</span>
+          <span class="attr">poster</span>=<span class="text">"..."</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;source</span>
+          <span class="attr">src</span>=<span class="text"
+            >"/test/sample-video.mp4"</span
+          ><span class="tag">&gt;</span>
+          <span class="text">動画を再生できません</span>
+          <span class="tag">&lt;/video&gt;</span>
+        </div>
+        <div class="expected">video要素クリック時: txt="", href=""</div>
+      </div>
+    </div>
+
+    <!-- リンク内のナビゲーション -->
+    <div class="test-section">
+      <h2>🧭 ナビゲーション要素のテストケース</h2>
+
+      <div class="test-case">
+        <h3>Case 11: ナビゲーションバー（異なる要素の組み合わせ）</h3>
+        <nav class="navigation-bar">
+          <a href="/test/home">
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTIgMiA2IDEwSDZ6bTAgNiA2IDEwSDZ6IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48L3N2Zz4="
+              alt="Home Icon"
+            />
+            ホーム
+          </a>
+          <a href="/test/products">製品一覧</a>
+          <a href="/test/about">
+            <span>会社概要</span>
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMmEzIDMgMCAxIDEgMCA2IDMgMyAwIDAgMS0wLTZ6TTIwIDIwYTEyIDEyIDAgMSAwLTggMCIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg=="
+              alt="Info Icon"
+            />
+          </a>
+        </nav>
+        <div class="html-structure">
+          <span class="tag">&lt;nav&gt;</span> <span class="tag">&lt;a</span>
+          <span class="attr">href</span>=<span class="text">"/test/home"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;img</span>
+          <span class="attr">alt</span>=<span class="text">"Home Icon"</span
+          ><span class="tag">&gt;</span>
+          <span class="text">ホーム</span>
+          <span class="tag">&lt;/a&gt;</span>
+          <span class="tag">&lt;a</span> <span class="attr">href</span>=<span
+            class="text"
+            >"/test/products"</span
+          ><span class="tag">&gt;</span><span class="text">製品一覧</span
+          ><span class="tag">&lt;/a&gt;</span> <span class="tag">&lt;a</span>
+          <span class="attr">href</span>=<span class="text">"/test/about"</span
+          ><span class="tag">&gt;</span> <span class="tag">&lt;span&gt;</span
+          ><span class="text">会社概要</span
+          ><span class="tag">&lt;/span&gt;</span>
+          <span class="tag">&lt;img</span> <span class="attr">alt</span>=<span
+            class="text"
+            >"Info Icon"</span
+          ><span class="tag">&gt;</span>
+          <span class="tag">&lt;/a&gt;</span>
+          <span class="tag">&lt;/nav&gt;</span>
+        </div>
+        <div class="expected">
+          ホームアイコンクリック時: txt="ホーム", href="/test/home"<br />
+          「ホーム」テキストクリック時: txt="ホーム", href="/test/home"<br />
+          「製品一覧」クリック時: txt="製品一覧", href="/test/products"<br />
+          「会社概要」spanクリック時: txt="会社概要", href="/test/about"<br />
+          Info Iconクリック時: txt="会社概要", href="/test/about"
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #e3f2fd;
+        border-radius: 8px;
+      "
+    >
+      <h3>🧪 テスト実行のポイント</h3>
+      <ul>
+        <li><strong>開発者ツール</strong>でNetworkタブまたはConsoleを監視</li>
+        <li><strong>WebSocketメッセージ</strong>のtxtとhrefフィールドを確認</li>
+        <li>
+          <strong>リンク内要素</strong>: クリック時に適切なリンクURLが記録される
+        </li>
+        <li><strong>画像要素</strong>: alt属性がテキストとして取得される</li>
+        <li><strong>特に注目</strong>: Case 3のdivクリック時のテキスト取得</li>
+      </ul>
+    </div>
+
+    <script>
+      (() => {
+        if (location.search) {
+          Array.from(document.getElementsByTagName("a")).forEach(
+            (el) => (el.href += location.search),
+          );
+        }
+      })();
+    </script>
+  </body>
+</html>
