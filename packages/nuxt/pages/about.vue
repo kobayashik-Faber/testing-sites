@@ -3,7 +3,7 @@ useSeoMeta({
   title: "@testing-sites/nuxt | About"
 });
 
-const links = [
+const items = [
   {
     label: "Home",
     icon: "i-heroicons-home",
@@ -18,7 +18,7 @@ const links = [
 
 <template>
   <div class="breadcrumb">
-    <UBreadcrumb :links="links" />
+    <UBreadcrumb :items="items" />
   </div>
   <section>
     <p>This page will be displayed at the /about/ route.</p>
