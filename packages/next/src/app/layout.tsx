@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AppHeader } from "@/components/AppHeader";
-import { AppFooter } from "@/components/AppFooter";
 import Script from "next/script";
 import { Suspense } from "react";
+import { AppFooter } from "@/components/AppFooter";
+import { AppHeader } from "@/components/AppHeader";
 
 export const metadata: Metadata = {
   title: {
@@ -21,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <Script
         id="gtm"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Google Tag Manager requires inline script injection
         dangerouslySetInnerHTML={{
           __html: `
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -33,6 +34,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       />
       <body>
         <noscript
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Google Tag Manager noscript fallback requires inline iframe
           dangerouslySetInnerHTML={{
             __html: `
 <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W6Z5HJBL"
