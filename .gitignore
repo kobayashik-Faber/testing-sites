@@ -42,3 +42,7 @@ Thumbs.db
 .nx/workspace-data
 
 testing-sites
+
+.claude/worktrees
+.nx/polygraph
+.nx/self-healing
