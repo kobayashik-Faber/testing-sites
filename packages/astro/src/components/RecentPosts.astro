@@ -1,7 +1,7 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
-import FormattedDate from "./FormattedDate.astro";
+import { Image } from 'astro:assets';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
 
 interface Props {
   currentSlug?: string;
@@ -9,7 +9,7 @@ interface Props {
 
 const { currentSlug } = Astro.props;
 
-const posts = await getCollection("blog");
+const posts = await getCollection('blog');
 
 const sortedPosts = posts
   .filter((post) => post.id !== currentSlug)

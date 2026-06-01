@@ -1,0 +1,6 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  // Inherits the workspace root config ("//"); no Next-specific overrides needed.
+  "root": false,
+  "extends": "//"
+}

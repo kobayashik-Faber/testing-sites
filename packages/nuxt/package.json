@@ -6,7 +6,8 @@
     "build": "nuxt generate",
     "dev": "nuxt dev",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "biome check"
   },
   "dependencies": {
     "@nuxt/ui": "^4.8.1",

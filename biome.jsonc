@@ -1,12 +1,18 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  // Workspace root config; packages inherit it via "extends": "//" (Biome v2 nested configs).
+  // NOTE: nested-config auto-discovery is slated to become opt-in in a future major release.
+  // Revisit this root/nested layout on the next major upgrade — https://biomejs.dev/blog/roadmap-2026/
+  "root": true,
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    // Deploy output: build artifacts are copied here, so it is not source to lint/format.
+    "includes": ["**", "!public"]
   },
   "formatter": {
     "enabled": true,
@@ -21,7 +27,7 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double"
+      "quoteStyle": "single"
     }
   },
   "assist": {
@@ -34,6 +40,7 @@
   },
   "overrides": [
     {
+      // Allow framework at-rules (e.g. Tailwind's @tailwind / @apply).
       "includes": ["**/*.css"],
       "linter": {
         "rules": {
