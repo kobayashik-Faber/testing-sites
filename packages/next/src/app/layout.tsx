@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import Script from "next/script";
-import { Suspense } from "react";
-import { AppFooter } from "@/components/AppFooter";
-import { AppHeader } from "@/components/AppHeader";
+import type { Metadata } from 'next';
+import './globals.css';
+import Script from 'next/script';
+import { Suspense } from 'react';
+import { AppFooter } from '@/components/AppFooter';
+import { AppHeader } from '@/components/AppHeader';
 
 export const metadata: Metadata = {
   title: {
-    default: "@testing-sites/next",
-    template: "@testing-sites/next | %s",
+    default: '@testing-sites/next',
+    template: '@testing-sites/next | %s',
   },
 };
 

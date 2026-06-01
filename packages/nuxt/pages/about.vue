@@ -1,17 +1,17 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: "@testing-sites/nuxt | About"
+  title: '@testing-sites/nuxt | About',
 });
 
 const items = [
   {
-    label: "Home",
-    icon: "i-heroicons-home",
-    to: "/",
+    label: 'Home',
+    icon: 'i-heroicons-home',
+    to: '/',
   },
   {
-    label: "About",
-    icon: "i-heroicons-user",
+    label: 'About',
+    icon: 'i-heroicons-user',
   },
 ];
 </script>

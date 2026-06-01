@@ -1,0 +1,22 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  // Inherits the workspace root config ("//").
+  "root": false,
+  "extends": "//",
+  "overrides": [
+    {
+      // Astro/Vue/Svelte support is experimental (Biome v2.3+). Imports/variables used only in
+      // the template are still flagged as unused (false positives as of 2.4.16), so disable these
+      // rules for SFCs. Re-evaluate once SFC support stabilizes — https://biomejs.dev/internals/language-support/
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off",
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    }
+  ]
+}

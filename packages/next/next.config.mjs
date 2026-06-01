@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "/testing-sites/next",
-  output: "export",
+  basePath: '/testing-sites/next',
+  output: 'export',
   trailingSlash: true,
 };
 

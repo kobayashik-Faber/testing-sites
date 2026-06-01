@@ -5,7 +5,9 @@
   "scripts": {
     "build": "nx run-many -t build && pnpm clean && cp -r packages/next/out public/next && cp -r packages/nuxt/.output/public public/nuxt && cp -r packages/svelte-kit/build public/svelte-kit && cp -r packages/astro/dist public/astro",
     "clean": "rm -rf public/next public/nuxt public/svelte-kit public/astro",
-    "preview": "ln -fs public testing-sites && http-server . -p 4200"
+    "preview": "ln -fs public testing-sites && http-server . -p 4200",
+    "lint": "biome check",
+    "format": "biome check --write"
   },
   "private": true,
   "engines": {
@@ -13,6 +15,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@biomejs/biome": "2.4.16",
     "@nx/js": "22.7.5",
     "@nx/workspace": "22.7.5",
     "nx": "22.7.5",

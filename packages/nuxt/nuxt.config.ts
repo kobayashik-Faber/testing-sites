@@ -1,11 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
-    baseURL: "/testing-sites/nuxt/",
+    baseURL: '/testing-sites/nuxt/',
     head: {
       script: [
         {
-          id: "mierucaOptimizejs",
+          id: 'mierucaOptimizejs',
           innerHTML: `
 window.__optimizeid = window.__optimizeid || [];__optimizeid.push([1842686338]);
 (function () {var fjs = document.createElement('script');fjs.type = 'text/javascript';
@@ -16,7 +16,7 @@ var x = document.getElementsByTagName('script')[0];x.parentNode.insertBefore(fjs
       ],
     },
   },
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ["@nuxt/ui"],
+  modules: ['@nuxt/ui'],
 });
