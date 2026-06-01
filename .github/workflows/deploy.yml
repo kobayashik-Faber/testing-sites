@@ -35,9 +35,9 @@ jobs:
 
       - name: copy
         run: |
-          cp -r packages/next/out/ public/next/
-          cp -r packages/nuxt/dist/ public/nuxt/
-          cp -r packages/svelte-kit/build/ public/svelte-kit/
+          cp -r apps/next/out/ public/next/
+          cp -r apps/nuxt/dist/ public/nuxt/
+          cp -r apps/svelte-kit/build/ public/svelte-kit/
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
